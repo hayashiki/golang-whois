@@ -16,7 +16,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"net"
 	"strings"
 	"time"
 
@@ -34,10 +33,10 @@ func GetWhois(ctx context.Context, domain string) (string, error) {
 func GetWhoisTimeout(ctx context.Context, domain string, timeout time.Duration) (result string, err error) {
 
 	var (
-		parts      []string
-		zone       string
-		buffer     []byte
-		connection net.Conn
+		parts  []string
+		zone   string
+		buffer []byte
+		// connection net.Conn
 	)
 
 	parts = strings.Split(domain, ".")
@@ -55,7 +54,8 @@ func GetWhoisTimeout(ctx context.Context, domain string, timeout time.Duration) 
 		return
 	}
 
-	connection, err = socket.DialTimeout(ctx, "tcp", net.JoinHostPort(server, "43"), timeout)
+	// connection, err = socket.DialTimeout(ctx, "tcp", net.JoinHostPort(server, "43"), timeout)
+	connection, err := socket.Dial(ctx, "tcp", server+":43")
 
 	if err != nil {
 		//return net.Conn error
