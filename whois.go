@@ -55,7 +55,7 @@ func GetWhoisTimeout(ctx context.Context, domain string, timeout time.Duration) 
 		return
 	}
 
-	connection, err = socket.DialTimeout(ctx, "tcp", socket.JoinHostPort(server, "43"), timeout)
+	connection, err = socket.DialTimeout(ctx, "tcp", net.JoinHostPort(server, "43"), timeout)
 
 	if err != nil {
 		//return net.Conn error
