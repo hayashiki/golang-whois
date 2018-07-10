@@ -13,22 +13,25 @@
 package whois
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net"
 	"strings"
 	"time"
+
+	"google.golang.org/appengine/socket"
 )
 
 //Simple connection to whois servers with default timeout 5 sec
-func GetWhois(domain string) (string, error) {
+func GetWhois(ctx context.Context, domain string) (string, error) {
 
-	return GetWhoisTimeout(domain, time.Second*5)
+	return GetWhoisTimeout(ctx, domain, time.Second*5)
 
 }
 
 //Connection to whois servers with various time.Duration
-func GetWhoisTimeout(domain string, timeout time.Duration) (result string, err error) {
+func GetWhoisTimeout(ctx context.Context, domain string, timeout time.Duration) (result string, err error) {
 
 	var (
 		parts      []string
@@ -52,7 +55,7 @@ func GetWhoisTimeout(domain string, timeout time.Duration) (result string, err e
 		return
 	}
 
-	connection, err = net.DialTimeout("tcp", net.JoinHostPort(server, "43"), timeout)
+	connection, err = socket.DialTimeout(ctx, "tcp", socket.JoinHostPort(server, "43"), timeout)
 
 	if err != nil {
 		//return net.Conn error
